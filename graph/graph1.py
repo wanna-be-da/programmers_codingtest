@@ -5,10 +5,16 @@ def solution(n, edge):
     answer = 0
 
     #행렬만들기 n+1 * n+1 행렬 만들기
-    graph = [[0]*(n+1) for _ in range(n+1)]
+    # graph = [[0]*(n+1) for _ in range(n+1)]
+    # for e in edge:
+    #     graph[e[0]][e[1]] = 1
+    #     graph[e[1]][e[0]] = 1
+
+    #인접리스트 만들기
+    graph = [[] for _ in range(n+1)]
     for e in edge:
-        graph[e[0]][e[1]] = 1
-        graph[e[1]][e[0]] = 1
+        graph[e[0]].append(e[1])
+        graph[e[1]].append(e[0])
 
     #1번노드로부터 큐를 활용한 DFS시작
     visited = [0] * (n+1)
@@ -17,10 +23,10 @@ def solution(n, edge):
     while len(quene) > 0:
         temp = quene.pop(0)
         adjacents = []
-        for index, val in enumerate(graph[temp]):
-            if val == 1 and visited[index] == 0:
-                adjacents.append(index)
-                visited[index] = visited[temp] + 1
+        for node in graph[temp]:
+            if visited[node] == 0:
+                adjacents.append(node)
+                visited[node] = visited[temp] + 1
         quene.extend(adjacents)
 
     max_ = max(visited)
